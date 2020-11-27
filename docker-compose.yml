@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: Dockerfile-nginx
+        volumes:
+            - ./:/var/www/symfony/
+        ports:
+            - 80:80
+        depends_on:
+            -   php
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile-php
+        depends_on:
+            -   mysql
+        volumes:
+            - ./:/var/www/symfony/
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: kitty_phpmyadmin
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+        ports:
+            - 8080:80
+        links:
+            - mysql
+    mysql:
+        image: mysql:latest
+        command: "--default-authentication-plugin=mysql_native_password"
+        environment:
+            MYSQL_DATABASE: symfony_db
+            MYSQL_USER: symfony_user
+            MYSQL_PASSWORD: symfony_password
+            MYSQL_ROOT_PASSWORD : root
+        ports:
+            - 3308:3306
+        volumes:
+            - ./data:/var/lib/mysql:rw
