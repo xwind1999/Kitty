@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
@@ -16,9 +17,9 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/questions/{slug}")
+     * @Route("/questions/{slug}", name="app_question_show")
      * @param $slug
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function show($slug)
     {
