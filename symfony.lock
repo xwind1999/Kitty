@@ -11,8 +11,75 @@
             "config/routes/annotations.yaml"
         ]
     },
+    "doctrine/cache": {
+        "version": "1.10.2"
+    },
+    "doctrine/collections": {
+        "version": "1.6.7"
+    },
+    "doctrine/common": {
+        "version": "3.0.2"
+    },
+    "doctrine/dbal": {
+        "version": "2.12.1"
+    },
+    "doctrine/doctrine-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "368794356c1fb634e58b38ad2addb36933f2e73e"
+        },
+        "files": [
+            "config/packages/doctrine.yaml",
+            "config/packages/prod/doctrine.yaml",
+            "src/Entity/.gitignore",
+            "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-migrations-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "baaa439e3e3179e69e3da84b671f0a3e4a2f56ad"
+        },
+        "files": [
+            "config/packages/doctrine_migrations.yaml",
+            "migrations/.gitignore"
+        ]
+    },
+    "doctrine/event-manager": {
+        "version": "1.1.1"
+    },
+    "doctrine/inflector": {
+        "version": "1.4.3"
+    },
+    "doctrine/instantiator": {
+        "version": "1.4.0"
+    },
     "doctrine/lexer": {
         "version": "1.2.1"
+    },
+    "doctrine/migrations": {
+        "version": "3.0.1"
+    },
+    "doctrine/orm": {
+        "version": "2.7.4"
+    },
+    "doctrine/persistence": {
+        "version": "2.1.0"
+    },
+    "doctrine/sql-formatter": {
+        "version": "1.1.1"
+    },
+    "knplabs/knp-markdown-bundle": {
+        "version": "1.8.1"
+    },
+    "michelf/php-markdown": {
+        "version": "1.9.0"
     },
     "monolog/monolog": {
         "version": "2.1.1"
@@ -101,6 +168,9 @@
     "symfony/deprecation-contracts": {
         "version": "v2.2.0"
     },
+    "symfony/doctrine-bridge": {
+        "version": "v5.1.9"
+    },
     "symfony/dotenv": {
         "version": "v5.1.8"
     },
@@ -183,6 +253,9 @@
             "config/packages/prod/monolog.yaml",
             "config/packages/test/monolog.yaml"
         ]
+    },
+    "symfony/orm-pack": {
+        "version": "v2.0.0"
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.20.0"
