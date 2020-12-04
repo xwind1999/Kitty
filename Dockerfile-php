@@ -1,7 +1,9 @@
 FROM php:7.4-fpm-alpine
 
-RUN docker-php-ext-install -j$(nproc) mysqli opcache
-
+RUN docker-php-ext-install -j$(nproc) mysqli opcache pdo pdo_mysql
+RUN apk update && apk add bash && apk add nano
+RUN wget https://get.symfony.com/cli/installer -O - | bash
+RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 ADD php.ini /usr/local/etc/php.ini
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer

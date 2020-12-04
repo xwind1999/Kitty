@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Question;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,5 +49,24 @@ class QuestionController extends AbstractController
             'questionText' => $parsedQuestionText,
             'answers' => $answers,
         ]);
+    }
+
+    /**
+     * @Route("/question/new")
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     * @throws \Exception
+     */
+    public function new(EntityManagerInterface $entityManager){
+        $question = new Question();
+        $question->setName('Missing pants')
+            ->setSlug('missing-pants-'.rand(0, 1000))
+            ->setQuestion('Twice is the best');
+        if (rand(1, 10) > 2) {
+            $question->setAskedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
+        }
+        $entityManager->persist($question);
+        $entityManager->flush();
+        return new Response('Time for some Doctrine magic!');
     }
 }
