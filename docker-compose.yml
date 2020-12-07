@@ -37,4 +37,4 @@ services:
         ports:
             - 3306:3306
         volumes:
-            - ./data/:/var/www/symfony/
+            - ./database/:/var/lib/mysql/
