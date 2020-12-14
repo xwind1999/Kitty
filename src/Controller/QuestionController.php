@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,12 +16,11 @@ class QuestionController extends AbstractController
 {
     /**
      * @Route("/", name="app_homepage")
-     * @param EntityManagerInterface $entityManager
+     * @param QuestionRepository $repository
      * @return Response
      */
-    public function homepage(EntityManagerInterface $entityManager): Response
+    public function homepage(QuestionRepository $repository): Response
     {
-        $repository = $entityManager->getRepository(Question::class);
         $questions = $repository->findAllAskedOrderedByNewest();
         return $this->render('question/homepage.html.twig', [
             'questions' => $questions,
@@ -29,20 +29,12 @@ class QuestionController extends AbstractController
 
     /**
      * @Route("/questions/{slug}", name="app_question_show")
-     * @param $slug
-     * @param MarkdownParserInterface $markdownParser
-     * @param CacheInterface $cache
+     * @param Question $question
      * @param EntityManagerInterface $entityManager
      * @return Response
-     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function show($slug, MarkdownParserInterface $markdownParser, CacheInterface $cache, EntityManagerInterface $entityManager)
+    public function show(Question $question, EntityManagerInterface $entityManager)
     {
-        $repository = $entityManager->getRepository(Question::class);
-        $question = $repository->findOneBy(['slug' => $slug]);
-        if (!$question) {
-            throw $this->createNotFoundException(sprintf('no question found for slug "%s"', $slug));
-        }
         $answers = [
             'Make sure your cat is sitting purrrfectly still 🤣',
             'Honestly, I like furry shoes better than MY cat',
@@ -69,6 +61,7 @@ class QuestionController extends AbstractController
         if (rand(1, 10) > 2) {
             $question->setAskedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
         }
+        $question->setVote(rand(-20,50));
         $entityManager->persist($question);
         $entityManager->flush();
         return new Response('Time for some Doctrine magic!');
