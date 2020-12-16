@@ -7,6 +7,8 @@ use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -33,7 +35,7 @@ class QuestionController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function show(Question $question, EntityManagerInterface $entityManager)
+    public function show(Question $question, EntityManagerInterface $entityManager): Response
     {
         $answers = [
             'Make sure your cat is sitting purrrfectly still 🤣',
@@ -54,16 +56,27 @@ class QuestionController extends AbstractController
      * @throws \Exception
      */
     public function new(EntityManagerInterface $entityManager){
-        $question = new Question();
-        $question->setName('Missing pants')
-            ->setSlug('missing-pants-'.rand(0, 1000))
-            ->setQuestion('Twice is the best');
-        if (rand(1, 10) > 2) {
-            $question->setAskedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
+        return new Response('OK');
+    }
+
+    /**
+     * @param Question $question
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse
+     * @Route("/question/{slug}/vote", name="app_question_vote", methods="POST")
+     */
+    public function questionVote(Question $question, Request $request, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $direction = $request->request->get('direction');
+        if ($direction === 'up'){
+            $question->upVote();
+        } elseif ($direction === 'down') {
+            $question->downVote();
         }
-        $question->setVote(rand(-20,50));
-        $entityManager->persist($question);
         $entityManager->flush();
-        return new Response('Time for some Doctrine magic!');
+        return $this->redirectToRoute('app_question_show', [
+            'slug' => $question->getSlug()
+        ]);
     }
 }

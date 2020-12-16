@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
  */
 class Question
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -24,6 +27,7 @@ class Question
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
+     * @Gedmo\Slug(fields={"name"})
      */
     private $slug;
 
@@ -33,7 +37,7 @@ class Question
     private $askedAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text")
      */
     private $question;
 
@@ -111,5 +115,17 @@ class Question
     {
         $prefix = $this->getVote() >=0 ? '+' : '-';
         return sprintf('%s %d', $prefix, abs($this->getVote()));
+    }
+
+    public function upVote(): self
+    {
+        $this->vote++;
+        return $this;
+    }
+
+    public function downVote(): self
+    {
+        $this->vote--;
+        return $this;
     }
 }
